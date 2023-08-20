@@ -87,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
                         });
                         try {
                             s = new Storage(path+"/"+name);
-                            file = s.fileBlock(1048576);
+                            file = s.fileBlock(10240);
                             socket.emit("file_name_success", "true");
                         } catch (IOException ex) {
                             uiHandler.post(new Runnable() {
