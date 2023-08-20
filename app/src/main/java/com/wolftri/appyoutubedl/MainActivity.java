@@ -23,6 +23,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
@@ -33,6 +34,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.util.HashMap;
+import java.util.Map;
 
 import multitaks.code.Code;
 import multitaks.directory.FileBlock;
@@ -78,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
                     text_info.setText("Esperando conexión: "+ip+":"+port);
                     socket.start(ip,port);
                     text_info.setText("Conectado: "+ip+":"+port);
-                    socket.on("file_name", (name) -> {
+                    socket.on("file", (name) -> {
                         uiHandler.post(new Runnable() {
                             @Override
                             public void run() {
@@ -86,8 +89,8 @@ public class MainActivity extends AppCompatActivity {
                             }
                         });
                         try {
-                            s = new Storage(path+"/"+name);
-                            file = s.fileBlock(1048576);
+                            s=new Storage(path+"/"+name);
+                            file=null;
                             socket.emit("file_name_success", "true");
                         } catch (IOException ex) {
                             uiHandler.post(new Runnable() {
@@ -98,7 +101,7 @@ public class MainActivity extends AppCompatActivity {
                             });
                         }
                     });
-                    socket.on("file_byte", (str_byte) -> {
+                    socket.on("file_byte", (message) -> {
                         uiHandler.post(new Runnable() {
                             @Override
                             public void run() {
@@ -106,7 +109,12 @@ public class MainActivity extends AppCompatActivity {
                             }
                         });
                         try {
-                            file.write(Code.byteArrayToString(str_byte,file.getBlockSize()));
+                            Map<String,Object> json=new Gson().fromJson(message,Map.class);
+                            int size=(int)Double.parseDouble(json.get("size").toString());
+                            if(file==null){
+                                file=s.fileBlock(size);
+                            }
+                            file.write(Code.byteArrayToString(json.get("byte").toString(),size));
                         } catch (Exception ex) {
                             ex.printStackTrace();
                         }
@@ -119,6 +127,12 @@ public class MainActivity extends AppCompatActivity {
                                     text_info.setText("Finalizado: "+s.getSrc());
                                 }
                             });
+                            try{
+                                file.close();
+                            }catch(IOException ex) {
+                                ex.printStackTrace();
+                            }
+                            file=null;
                         }
                     });
                 }catch(Exception ex){
@@ -178,6 +192,8 @@ public class MainActivity extends AppCompatActivity {
                     btn_connect.setText("Conectarse");
                     try{
                         socket.close();
+                        s.close();
+                        file.close();
                     }catch(Exception ex){
                         System.out.println(ex.getMessage());
                         ex.printStackTrace();
