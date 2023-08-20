@@ -10,60 +10,52 @@
         android:id="@+id/btn_scan"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="4dp"
         android:onClick="scan"
         android:text="Escanear"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.905"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.023" />
+        app:layout_constraintTop_toBottomOf="@+id/btn_connect" />
 
     <TextView
         android:id="@+id/text_info"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
         android:text="Hola!!!"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btn_scan" />
+        app:layout_constraintTop_toTopOf="@+id/box_port" />
 
     <Button
         android:id="@+id/btn_connect"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="24dp"
         android:text="Conectarse"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btn_scan" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
         android:id="@+id/box_ip"
         android:layout_width="141dp"
         android:layout_height="45dp"
-        android:layout_marginTop="24dp"
         android:ems="10"
         android:inputType="textPersonName"
         android:text="192.168.1.73"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btn_scan" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
         android:id="@+id/box_port"
         android:layout_width="87dp"
         android:layout_height="50dp"
-        android:layout_marginTop="20dp"
         android:ems="10"
         android:inputType="textPersonName"
         android:text="1234"
         app:layout_constraintEnd_toStartOf="@+id/btn_connect"
-        app:layout_constraintHorizontal_bias="0.603"
+        app:layout_constraintHorizontal_bias="0.14"
         app:layout_constraintStart_toEndOf="@+id/box_ip"
-        app:layout_constraintTop_toBottomOf="@+id/btn_scan" />
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
