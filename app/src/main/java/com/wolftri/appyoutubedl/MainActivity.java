@@ -87,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
                         });
                         try {
                             s = new Storage(path+"/"+name);
-                            file = s.fileBlock(10240);
+                            file = s.fileBlock(1048576);
                             socket.emit("file_name_success", "true");
                         } catch (IOException ex) {
                             uiHandler.post(new Runnable() {
@@ -106,7 +106,7 @@ public class MainActivity extends AppCompatActivity {
                             }
                         });
                         try {
-                            file.write(Code.byteArrayToString(str_byte, 8192));
+                            file.write(Code.byteArrayToString(str_byte,file.getBlockSize()));
                         } catch (Exception ex) {
                             ex.printStackTrace();
                         }
