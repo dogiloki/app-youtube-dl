@@ -88,33 +88,25 @@ public class MainActivity extends AppCompatActivity {
                                 text_info.setText("Esperando archivo");
                             }
                         });
-                        try {
-                            s=new Storage(path+"/"+name);
-                            file=null;
-                            socket.emit("file_name_success", "true");
-                        } catch (IOException ex) {
-                            uiHandler.post(new Runnable() {
-                                @Override
-                                public void run() {
-                                    text_info.setText(ex.getMessage());
-                                }
-                            });
-                        }
+                        s=new Storage(path+"/"+name);
+                        file=null;
+                        socket.emit("file_name_success", "true");
                     });
                     socket.on("file_byte", (message) -> {
-                        uiHandler.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                text_info.setText("Recibiendo: "+s.getSrc());
-                            }
-                        });
                         try {
                             Map<String,Object> json=new Gson().fromJson(message,Map.class);
                             int size=(int)Double.parseDouble(json.get("size").toString());
                             if(file==null){
                                 file=s.fileBlock(size);
                             }
-                            file.write(Code.byteArrayToString(json.get("byte").toString(),size));
+                            byte[] b=Code.byteArrayToString(json.get("byte").toString(),size);
+                            uiHandler.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    text_info.setText("Recibiendo: "+b+s.getSrc());
+                                }
+                            });
+                            file.write(b);
                         } catch (Exception ex) {
                             ex.printStackTrace();
                         }
